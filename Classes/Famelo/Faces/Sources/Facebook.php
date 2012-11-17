@@ -40,13 +40,24 @@ class Facebook {
 	protected $image = NULL;
 
 	public function __construct($email, $size = 64) {
-		$resty = new \Resty();
-		$resty->setBaseURL($this->baseUrl);
+		$fb = new \Facebook(array(
+			'appId' => '385015441576593',
+			'secret' => 'fcef3c5bc4443ee5804402c5e0d7b88a'
+		));
 
-		$emailHash = md5(strtolower( trim( $email ) ) );
-		$resp = $resty->get($emailHash . '?d=404&s=' . $size);
-		if ($resp['status'] == 200) {
-			$this->image = $this->baseUrl . $emailHash . '?d=404&s=' . $size;
+		$user = $fb->getUser();
+
+		if ($user) {
+			$userData = $fb->api('/search?q=apocalip@gmail.com&type=user&access_token=' . $fb->getAccessToken(), 'GET');
+		} else {
+			echo '<meta http-equiv="refresh" content="0;url=' . $fb->getLoginUrl() . '">';
+			exit();
+		}
+
+		if (isset($userData['data'][0]['id'])) {
+			$id = $userData['data'][0]['id'];
+			$picture = $fb->api('/' . $id . '/picture', 'GET');
+			$this->image = 'http://graph.facebook.com/' . $id . '/picture?width=' . $size . '&height=' . $size;
 		}
 	}
 
