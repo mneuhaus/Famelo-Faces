@@ -31,8 +31,8 @@ class Face {
 	 * @var array
 	 */
 	protected $sources = array(
-		'\Famelo\Faces\Sources\Facebook',
-		'\Famelo\Faces\Sources\Gravatar'
+		'\Famelo\Faces\Sources\Gravatar',
+		'\Famelo\Faces\Sources\Facebook'
 	);
 
 	public function __construct($email, $sources = NULL) {

@@ -40,14 +40,21 @@ class Gravatar {
 	protected $image = NULL;
 
 	public function __construct($email, $size = 64) {
-		$resty = new \Resty();
-		$resty->setBaseURL($this->baseUrl);
-
 		$emailHash = md5(strtolower( trim( $email ) ) );
-		$resp = $resty->get($emailHash . '?d=404&s=' . $size);
+		$resp = $this->getUrl($this->baseUrl . $emailHash . '?d=404&s=' . $size);
 		if ($resp['status'] == 200) {
 			$this->image = $this->baseUrl . $emailHash . '?d=404&s=' . $size;
 		}
+	}
+
+	public function getUrl($url) {
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_HEADER, 0);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		$result = curl_exec($ch);
+		curl_close($ch);
+		return $result;
 	}
 
 	public function getImage() {
