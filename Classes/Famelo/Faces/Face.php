@@ -30,18 +30,19 @@ class Face {
 	 *
 	 * @var array
 	 */
-	protected $sources = array(
-		'\Famelo\Faces\Sources\GravatarSource',
-//		'\Famelo\Faces\Sources\FacebookSource'
+	protected $defaults = array(
+		'size' => '64',
+		'sources' => array(
+			'\Famelo\Faces\Sources\GravatarSource',
+	//		'\Famelo\Faces\Sources\FacebookSource'
+		)
 	);
 
-	public function __construct($email, $sources = NULL) {
-		if ($sources !== NULL) {
-			$this->sources = $sources;
-		}
+	public function __construct($email, $options = array()) {
+		$options = array_merge($this->defaults, $options);
 
-		foreach ($this->sources as $source) {
-			$sourceObject = new $source($email);
+		foreach ($options['sources'] as $source) {
+			$sourceObject = new $source($email, $options);
 			if ($sourceObject->getImage() !== NULL) {
 				break;
 			}

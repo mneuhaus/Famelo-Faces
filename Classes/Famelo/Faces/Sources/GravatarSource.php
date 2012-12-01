@@ -39,12 +39,12 @@ class GravatarSource {
 	 */
 	protected $image = NULL;
 
-	public function __construct($email, $size = 64) {
+	public function __construct($email, $options) {
 		$emailHash = md5(strtolower( trim( $email ) ) );
-		$response = $this->getUrl($this->baseUrl . $emailHash . '?d=404&s=' . $size);
-		
+		$response = $this->getUrl($this->baseUrl . $emailHash . '?d=404&s=' . $options['size']);
+
 		if (!empty($response)) {
-			$this->image = $this->baseUrl . $emailHash . '?d=404&s=' . $size;
+			$this->image = $this->baseUrl . $emailHash . '?d=404&s=' . $options['size'];
 		}
 	}
 
